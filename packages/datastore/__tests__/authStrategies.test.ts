@@ -449,8 +449,10 @@ async function testMultiAuthStrategy({
 }) {
 	mockCurrentUser({ hasAuthenticatedUser });
 
-	const multiAuthStrategy =
+	const multiAuthStrategyWrapper =
 		require('../src/authModeStrategies/multiAuthStrategy').multiAuthStrategy;
+
+	const multiAuthStrategy = multiAuthStrategyWrapper({});
 
 	const schema = getAuthSchema(authRules);
 
@@ -538,6 +540,7 @@ function mockCurrentUser({
 	hasAuthenticatedUser: boolean;
 }) {
 	jest.mock('@aws-amplify/auth', () => ({
+		boop: true,
 		currentAuthenticatedUser: () => {
 			return new Promise((res, rej) => {
 				if (hasAuthenticatedUser) {

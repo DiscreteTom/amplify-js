@@ -10,6 +10,7 @@ import {
 	AuthModeStrategy,
 	ErrorHandler,
 	ProcessName,
+	AmplifyContext,
 } from '../../types';
 import {
 	buildGraphQLOperation,
@@ -45,8 +46,9 @@ class SyncProcessor {
 		private readonly amplifyConfig: Record<string, any> = {},
 		private readonly authModeStrategy: AuthModeStrategy,
 		private readonly errorHandler: ErrorHandler,
-		private readonly modelInstanceCreator?: ModelInstanceCreator
+		private readonly amplifyContext: AmplifyContext
 	) {
+		amplifyContext.API = amplifyContext.API || API;
 		this.generateQueries();
 	}
 
@@ -208,7 +210,7 @@ class SyncProcessor {
 						this.amplifyConfig
 					);
 
-					return await API.graphql({
+					return await this.amplifyContext.API.graphql({
 						query,
 						variables,
 						authMode,
